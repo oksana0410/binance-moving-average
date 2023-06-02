@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MA Candles</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        .notification {
+            background-color: red;
+            color: white;
+            padding: 10px;
+            display: none;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const notificationVisible = {{ notification_visible|lower }};
+            const notification = document.getElementById('notification');
+            if (notificationVisible) {
+                notification.style.display = 'block';
+            }
+        });
+    </script>
+</head>
+<body>
+    <h1>MA Candles</h1>
+    <form method="POST" action="/">
+        <label for="symbol">Symbol:</label>
+        <input type="text" id="symbol" name="symbol" value="{{ symbol }}"><br><br>
+
+        <label for="period">Period:</label>
+        <input type="text" id="period" name="period" value="{{ period }}"><br><br>
+
+        <label for="interval">Interval:</label>
+        <input type="text" id="interval" name="interval" value="{{ interval }}"><br><br>
+
+        <label for="limit">Limit:</label>
+        <input type="text" id="limit" name="limit" value="{{ limit }}"><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+    <h2>Close Prices:</h2>
+    <ul>
+        {% for price in close_prices %}
+        <li>{{ price }}</li>
+        {% endfor %}
+    </ul>
+
+    {% if graph_html %}
+    <div id="graph">
+        {{ graph_html|safe }}
+    </div>
+    {% endif %}
+
+    <div id="notification" class="notification">
+        Candle count with close price below MA limit exceeded: {{ candle_count }}
+    </div>
+</body>
+</html>
